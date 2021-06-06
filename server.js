@@ -3,7 +3,7 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const app = express();
 
-app.get('/cp', async (req, res) => {
+app.get('/', async (req, res) => {
     const { provincia, localidad } = req.query;
     const provinciaData = provincia.toLowerCase();
     const localidadData = localidad.replace(/\s/g, '').toLowerCase();
