@@ -77,6 +77,7 @@ app.get('/cp', async (req, res) => {
                 status: 'fail',
                 message: 'No encontramos el código postal de la localidad seleccionada'
             });
+            res.json("No encontramos el código postal de la localidad seleccionada")
         }
     } else if(provinciaData === "ciudadautónomadebuenosaires"){
         let data = cp_capital[localidadData];
