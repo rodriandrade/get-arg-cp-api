@@ -64,14 +64,14 @@ app.get('/cp', async (req, res) => {
     const { provincia, localidad } = req.query;
     const provinciaData = provincia.replace(/\s/g, '').toLowerCase();
     const localidadData = localidad.replace(/\s/g, '').toLowerCase();
-    if(provincia !== "ciudadautonomadebuenosaires"){
+    if(provinciaData !== "ciudadautonomadebuenosaires"){
         const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provinciaData}/${localidadData}`);
         const $ = cheerio.load(html.data);
         const heading = $('.jumbotron');
         const cp = heading.find('p.lead').text();
         const data = cp.substr(14);
         res.json(data);
-    } else if(provincia === "ciudadautonomadebuenosaires"){
+    } else if(provinciaData === "ciudadautonomadebuenosaires"){
         res.json(cp_capital[localidad]);
     }    
 })
