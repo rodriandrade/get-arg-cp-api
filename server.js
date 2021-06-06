@@ -54,6 +54,8 @@ const cp_capital = {
     villasoldati: [1406, 1407, 1437]
 }
 
+app.use(express.json());
+
 app.get('/', async (req, res) => {
     const { provincia, localidad } = req.query;
     const provinciaData = provincia.toLowerCase();
@@ -64,9 +66,9 @@ app.get('/', async (req, res) => {
         const heading = $('.jumbotron');
         const cp = heading.find('p.lead').text();
         const data = cp.substr(14);
-        res.send(data);
+        res.json(data);
     } else if(provincia === "ciudadautonomadebuenosaires"){
-        res.send(cp_capital[localidad]);
+        res.json(cp_capital[localidad]);
     }    
 })
 
