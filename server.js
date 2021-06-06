@@ -65,12 +65,19 @@ app.get('/cp', async (req, res) => {
     const provinciaData = provincia.replace(/\s/g, '').toLowerCase();
     const localidadData = localidad.replace(/\s/g, '').toLowerCase();
     if(provinciaData !== "ciudadautónomadebuenosaires"){
-        const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provinciaData}/${localidadData}`);
-        const $ = cheerio.load(html.data);
-        const heading = $('.jumbotron');
-        const cp = heading.find('p.lead').text();
-        const data = cp.substr(14);
-        res.json(data);
+        try{
+            const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provinciaData}/${localidadData}`);
+            const $ = cheerio.load(html.data);
+            const heading = $('.jumbotron');
+            const cp = heading.find('p.lead').text();
+            const data = cp.substr(14);
+            res.json(data);
+        } catch(error){
+            res.status(404).json({
+                status: 'fail',
+                message: error
+            });
+        }
     } else if(provinciaData === "ciudadautónomadebuenosaires"){
         let data = cp_capital[localidadData];
         res.json(data);
