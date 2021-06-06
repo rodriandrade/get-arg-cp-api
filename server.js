@@ -71,7 +71,7 @@ app.get('/cp', async (req, res) => {
         const cp = heading.find('p.lead').text();
         const data = cp.substr(14);
         res.json(data);
-    } else if(provincia === "ciudadautónomadebuenosaires"){
+    } else if(provinciaData === "ciudadautónomadebuenosaires"){
         res.send(cp_capital[localidadData]);
     }    
 })
