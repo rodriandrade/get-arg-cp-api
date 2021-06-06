@@ -62,7 +62,7 @@ app.get('/', (req, res) =>{
 
 app.get('/cp', async (req, res) => {
     const { provincia, localidad } = req.query;
-    const provinciaData = provincia.toLowerCase();
+    const provinciaData = provincia.replace(/\s/g, '').toLowerCase();
     const localidadData = localidad.replace(/\s/g, '').toLowerCase();
     if(provincia !== "ciudadautonomadebuenosaires"){
         const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provinciaData}/${localidadData}`);
