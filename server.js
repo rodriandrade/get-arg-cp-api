@@ -56,7 +56,11 @@ const cp_capital = {
 
 app.use(express.json());
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) =>{
+    res.send("Welcome to the arg-cp API!");
+})
+
+app.get('/cp', async (req, res) => {
     const { provincia, localidad } = req.query;
     const provinciaData = provincia.toLowerCase();
     const localidadData = localidad.replace(/\s/g, '').toLowerCase();
@@ -72,6 +76,6 @@ app.get('/', async (req, res) => {
     }    
 })
 
-app.listen(3000,() => {
-    console.log('Started on PORT 3000');
+app.listen(5000,() => {
+    console.log('Started on PORT 5000');
 })
