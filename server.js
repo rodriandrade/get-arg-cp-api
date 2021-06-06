@@ -75,7 +75,7 @@ app.get('/cp', async (req, res) => {
         } catch(error){
             res.status(404).json({
                 status: 'fail',
-                message: error
+                message: 'No encontramos el código postal de la localidad seleccionada'
             });
         }
     } else if(provinciaData === "ciudadautónomadebuenosaires"){
