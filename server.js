@@ -64,15 +64,15 @@ app.get('/cp', async (req, res) => {
     const { provincia, localidad } = req.query;
     const provinciaData = provincia.replace(/\s/g, '').toLowerCase();
     const localidadData = localidad.replace(/\s/g, '').toLowerCase();
-    if(provinciaData !== "caba"){
+    if(provinciaData !== "ciudadautónomadebuenosaires"){
         const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provinciaData}/${localidadData}`);
         const $ = cheerio.load(html.data);
         const heading = $('.jumbotron');
         const cp = heading.find('p.lead').text();
         const data = cp.substr(14);
         res.json(data);
-    } else if(provinciaData === "caba"){
-        res.send(cp_capital[localidad]);
+    } else if(provincia === "ciudadautónomadebuenosaires"){
+        res.send(cp_capital[localidadData]);
     }    
 })
 
