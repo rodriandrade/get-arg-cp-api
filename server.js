@@ -61,7 +61,10 @@ app.get('/', (req, res) =>{
 })
 
 app.get('/cp', async (req, res) => {
+    console.log(req.query)
     const { provincia, localidad } = req.query;
+    console.log(provincia)
+    console.log(localidad)
     const provinciaData = provincia.replace(/\s/g, '').toLowerCase();
     const localidadData = localidad.replace(/\s/g, '').toLowerCase();
     if(provinciaData !== "ciudadautónomadebuenosaires"){
@@ -71,6 +74,7 @@ app.get('/cp', async (req, res) => {
             const heading = $('.jumbotron');
             const cp = heading.find('p.lead').text();
             const data = cp.substr(14);
+            console.log(data);
             res.json(data);
         } catch(error){
             res.status(404).json({
@@ -83,6 +87,33 @@ app.get('/cp', async (req, res) => {
         let data = cp_capital[localidadData];
         res.json(data);
     }    
+})
+
+app.get('/cpv2', async (req, res) => {
+    const { provincia, localidad } = req.query;
+    const provinciaData = provincia.replace(/\s+/g, '-').toLowerCase();
+    const localidadData = localidad.replace(/\s+/g, '-').toLowerCase();
+    console.log(provinciaData);
+    if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
+        try{
+            const html = await axios.get(`https://codigo-postal.co/argentina/${provinciaData}/${localidadData}/`);
+            const $ = cheerio.load(html.data);
+            const heading = $('p');
+            console.log(heading[0]);
+            const cp = heading.find('strong').text();
+            const data = cp.slice(17, 21);
+            res.json(data);
+        } catch(error){
+            res.status(404).json({
+                status: 'fail',
+                message: 'No encontramos el código postal de la localidad seleccionada'
+            });
+            res.json("No encontramos el código postal de la localidad seleccionada")
+        }
+    } else if(provinciaData === "ciudad-autónoma-de-buenos-aires"){
+        let data = cp_capital[localidadData];
+        res.json(data);
+    }  
 })
 
 app.listen(5000,() => {
