@@ -90,10 +90,10 @@ app.get('/cp', async (req, res) => {
 })
 
 app.get('/cpv2', async (req, res) => {
-    const { provincia, localidad } = req.query;
+    const { provincia, localidad, departamento } = req.query;
     const provinciaData = provincia.replace(/\s+/g, '-').toLowerCase();
     const localidadData = localidad.replace(/\s+/g, '-').toLowerCase();
-    console.log(provinciaData);
+    const departamentoData = departamento.replace(/\s+/g, '-').toLowerCase();
     if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
         try{
             const html = await axios.get(`https://codigo-postal.co/argentina/${provinciaData}/${localidadData}/`);
@@ -104,11 +104,7 @@ app.get('/cpv2', async (req, res) => {
             const data = cp.slice(17, 21);
             res.json(data);
         } catch(error){
-            res.status(404).json({
-                status: 'fail',
-                message: 'No encontramos el código postal de la localidad seleccionada'
-            });
-            res.json("No encontramos el código postal de la localidad seleccionada")
+            tryWithDepartamento(provinciaData, departamentoData);
         }
     } else if(provinciaData === "ciudad-autónoma-de-buenos-aires"){
         let data = cp_capital[localidadData];
@@ -119,3 +115,21 @@ app.get('/cpv2', async (req, res) => {
 app.listen(5000,() => {
     console.log('Started on PORT 5000');
 })
+
+const tryWithDepartamento = async (provincia, departamento) =>{
+    try{
+        const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${departamento}/`);
+        const $ = cheerio.load(html.data);
+        const heading = $('p');
+        console.log(heading[0]);
+        const cp = heading.find('strong').text();
+        const data = cp.slice(17, 21);
+        res.json(data);
+    } catch(error){
+        res.status(404).json({
+            status: 'fail',
+            message: 'No encontramos el código postal de la localidad seleccionada'
+        });
+        res.json("No encontramos el código postal de la localidad seleccionada")
+    }
+}
