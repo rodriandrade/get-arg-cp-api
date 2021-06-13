@@ -130,10 +130,15 @@ app.get('/cpv2', async (req, res) => {
 
     console.log(req.query);
     const { provincia, localidad, departamento, localidad_censal } = req.query;
-    const provinciaData = provincia.replace(/\s+/g, '-').toLowerCase();
-    const localidadData = localidad.replace(/\s+/g, '-').toLowerCase();
-    const departamentoData = departamento.replace(/\s+/g, '-').toLowerCase();
-    const localidadCensalData = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+    const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
+    const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
+    const departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
+    const localidadCensalQuery = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+
+    const provinciaData = removeAccents(provinciaQuery);
+    const localidadData = removeAccents(localidadQuery);
+    const departamentoData = removeAccents(departamentoQuery);
+    const localidadCensalData = removeAccents(localidadCensalQuery);
 
     if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
 
@@ -146,7 +151,7 @@ app.get('/cpv2', async (req, res) => {
                     console.log("Vengo a buscar por localidad_censal");
                     f = await findCp(provinciaData, localidadCensalData);
                     if(f === ""){
-                        res.json("Mudate ami, imposible encontrar esto")
+                        res.json("Mudate ami, imposible encontrar esto");
                     } else {
                         res.json(f);
                     }
@@ -168,6 +173,10 @@ app.get('/cpv2', async (req, res) => {
     }  
 
 })
+
+const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+} 
 
 app.listen(5000,() => {
     console.log('Started on PORT 5000');
