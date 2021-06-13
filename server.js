@@ -113,7 +113,7 @@ const findCp2 = async (provincia, localidad) =>{
 
 const findCp = async (provincia, localidad) =>{
     try{
-        
+
         const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${localidad}/`);
         const $ = cheerio.load(html.data);
         const heading = $('p');
@@ -141,16 +141,18 @@ const findCp = async (provincia, localidad) =>{
 app.get('/cpv2', async (req, res) => {
 
     console.log(req.query);
-    const { provincia, localidad, departamento, localidad_censal } = req.query;
+    const { provincia, localidad, departamento, localidad_censal, municipio } = req.query;
     const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
     const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
     const departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
     const localidadCensalQuery = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+    const municipioQuery = municipio.replace(/\s+/g, '-').toLowerCase();
 
     const provinciaData = removeAccents(provinciaQuery);
     const localidadData = removeAccents(localidadQuery);
     const departamentoData = removeAccents(departamentoQuery);
     const localidadCensalData = removeAccents(localidadCensalQuery);
+    const municipioData = removeAccents(municipioQuery);
 
     if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
 
@@ -163,7 +165,13 @@ app.get('/cpv2', async (req, res) => {
                     console.log("Vengo a buscar por localidad_censal");
                     f = await findCp(provinciaData, localidadCensalData);
                     if(f === ""){
-                        res.json("Mudate ami, imposible encontrar esto");
+                        console.log("Vengo a buscar por municipio");
+                        f = await findCp(provinciaData, municipioData);
+                        if(f === ""){
+                            res.json("Mudate ami, imposible encontrar esto");
+                        } else {
+                            res.json(f);
+                        }
                     } else {
                         res.json(f);
                     }
@@ -187,6 +195,7 @@ app.get('/cpv2', async (req, res) => {
 })
 
 const removeAccents = (str) => {
+    // checkedNew = checked.replace(/\./g, ""); SACAR PUNTOS
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 } 
 
