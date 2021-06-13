@@ -146,13 +146,21 @@ app.get('/cpv2', async (req, res) => {
     const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
     const departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
     const localidadCensalQuery = localidad_censal.replace(/\s+/g, '-').toLowerCase();
-    const municipioQuery = municipio.replace(/\s+/g, '-').toLowerCase();
+    let municipioQuery;
+
+    if(municipio){
+        municipioQuery = municipio.replace(/\s+/g, '-').toLowerCase();
+    }
 
     const provinciaData = removeAccents(provinciaQuery);
     const localidadData = removeAccents(localidadQuery);
     const departamentoData = removeAccents(departamentoQuery);
     const localidadCensalData = removeAccents(localidadCensalQuery);
-    const municipioData = removeAccents(municipioQuery);
+    let municipioData;
+
+    if(municipioQuery){
+        municipioData = removeAccents(municipioQuery);
+    }
 
     if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
 
