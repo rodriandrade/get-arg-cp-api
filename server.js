@@ -89,40 +89,67 @@ app.get('/cp', async (req, res) => {
     }    
 })
 
+const findCp = async (provincia, localidad) =>{
+    try{
+        console.log(localidad);
+        const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${localidad}/`);
+        const $ = cheerio.load(html.data);
+        const heading = $('p');
+        const cp = heading.find('strong').text();
+        const data = cp.slice(17, 21);
+        return data
+    } catch(error){
+        return error
+    }
+}
+
 app.get('/cpv2', async (req, res) => {
-    const { provincia, localidad, departamento } = req.query;
+
+    console.log(req.query);
+    const { provincia, localidad, departamento, localidad_censal } = req.query;
     const provinciaData = provincia.replace(/\s+/g, '-').toLowerCase();
     const localidadData = localidad.replace(/\s+/g, '-').toLowerCase();
     const departamentoData = departamento.replace(/\s+/g, '-').toLowerCase();
+    const localidadCensalData = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+
     if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
-        try{
-            const html = await axios.get(`https://codigo-postal.co/argentina/${provinciaData}/${localidadData}/`);
-            const $ = cheerio.load(html.data);
-            const heading = $('p');
-            const cp = heading.find('strong').text();
-            const data = cp.slice(17, 21);
-            if(data === ""){
-                const tryWithDeparment = await tryWithDepartamento(provinciaData, departamentoData);
-                res.json(tryWithDeparment);
-            } else{
-                res.json(data);
+
+        let f = await findCp(provinciaData, localidadData);
+
+        if(f === ""){
+            f = await findCp(provinciaData, departamentoData);
+            if(f === ""){
+                f = await findCp(provinciaData, localidadCensalData);
+                if(f === ""){
+                    res.json("Mudate ami, imposible encontrar esto")
+                } else {
+                    res.json(f);
+                }
+            } else {
+                res.json(f);   
             }
-        } catch(error){
-            tryWithDepartamento(provinciaData, departamentoData);
+        } else {
+            res.json(f); 
         }
+        
+
     } else if(provinciaData === "ciudad-autónoma-de-buenos-aires"){
         let data = cp_capital[localidadData];
         res.json(data);
     }  
+
 })
 
 app.listen(5000,() => {
     console.log('Started on PORT 5000');
 })
 
+
+
+/*
 const tryWithDepartamento = async (provincia, departamento) =>{
     try{
-        console.log("Holis");
+        console.log("Busqué por departamento");
         const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${departamento}/`);
         const $ = cheerio.load(html.data);
         const heading = $('p');
@@ -133,3 +160,63 @@ const tryWithDepartamento = async (provincia, departamento) =>{
         return error
     }
 }
+
+const tryWithLocalidadCensal = async (provincia, localidad_censal) =>{
+    try{
+        console.log("Busqué por localidad");
+        const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${localidad_censal}/`);
+        const $ = cheerio.load(html.data);
+        const heading = $('p');
+        const cp = heading.find('strong').text();
+        const data = cp.slice(17, 21);
+        console.log(data);
+        return data
+    } catch(error){
+        return error
+    }
+}
+
+/*
+
+app.get('/cpv2', async (req, res) => {
+    const { provincia, localidad, departamento, localidad_censal } = req.query;
+    const provinciaData = provincia.replace(/\s+/g, '-').toLowerCase();
+    const localidadData = localidad.replace(/\s+/g, '-').toLowerCase();
+    const departamentoData = departamento.replace(/\s+/g, '-').toLowerCase();
+    const localidadCensalData = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+    if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
+        try{
+            const html = await axios.get(`https://codigo-postal.co/argentina/${provinciaData}/${localidadData}/`);
+            const $ = cheerio.load(html.data);
+            const heading = $('p');
+            const cp = heading.find('strong').text();
+            const data = cp.slice(17, 21);
+            if(data === ""){
+                const tryWithDeparment = await tryWithDepartamento(provinciaData, departamentoData);
+                console.log(tryWithDeparment);
+                if(tryWithDeparment === ""){
+                    console.log("JAJAJ");
+                    const tryWithLocalidadCensal = await tryWithLocalidadCensal(provinciaData, localidadCensalData);
+                    console.log("boquita");
+                    console.log(tryWithLocalidadCensal);
+                    res.json(tryWithLocalidadCensal)
+                } else {
+                    res.json(tryWithDeparment);
+                }
+            } else{
+                res.json(data);
+            }
+        } catch(error){
+            
+            tryWithDepartamento(provinciaData, departamentoData);
+        
+           tryWithLocalidadCensal(provinciaData, localidadCensalData);
+            
+        }
+    } else if(provinciaData === "ciudad-autónoma-de-buenos-aires"){
+        let data = cp_capital[localidadData];
+        res.json(data);
+    }  
+})
+
+*/
