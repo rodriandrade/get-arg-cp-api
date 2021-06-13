@@ -61,45 +61,68 @@ app.get('/', (req, res) =>{
 })
 
 app.get('/cp', async (req, res) => {
-    console.log(req.query)
-    const { provincia, localidad } = req.query;
-    console.log(provincia)
-    console.log(localidad)
-    const provinciaData = provincia.replace(/\s/g, '').toLowerCase();
-    const localidadData = localidad.replace(/\s/g, '').toLowerCase();
+    const { provincia, localidad, departamento, localidad_censal } = req.query;
+    const provinciaData = provincia.replace(/\s+/g, '-').toLowerCase();
+    const localidadData = localidad.replace(/\s+/g, '-').toLowerCase();
+    const departamentoData = departamento.replace(/\s+/g, '-').toLowerCase();
+    const localidadCensalData = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+
     if(provinciaData !== "ciudadautónomadebuenosaires"){
+        
         try{
-            const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provinciaData}/${localidadData}`);
-            const $ = cheerio.load(html.data);
-            const heading = $('.jumbotron');
-            const cp = heading.find('p.lead').text();
-            const data = cp.substr(14);
-            console.log(data);
-            res.json(data);
-        } catch(error){
-            res.status(404).json({
-                status: 'fail',
-                message: 'No encontramos el código postal de la localidad seleccionada'
-            });
-            res.json("No encontramos el código postal de la localidad seleccionada")
+            let f = await findCp2(provinciaData, localidadData);
+            if(f === ""){
+                f = await findCp2(provinciaData, departamentoData);
+                if(f === ""){
+                    f = await findCp2(provinciaData, localidadCensalData);
+                    if(f === ""){
+                        res.json("Mudate ami, imposible encontrar esto")
+                    } else {
+                        res.json(f);
+                    }
+                } else {
+                    res.json(f);   
+                }
+            } else {
+                res.json(f); 
+            }
+        } catch (error){
+            res.json(error)
         }
+
     } else if(provinciaData === "ciudadautónomadebuenosaires"){
         let data = cp_capital[localidadData];
         res.json(data);
     }    
 })
 
+const findCp2 = async (provincia, localidad) =>{
+    try{
+        console.log(localidad);
+        const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provincia}/${localidad}`);
+        const $ = cheerio.load(html.data);
+        const heading = $('.jumbotron');
+        const cp = heading.find('p.lead').text();
+        const data = cp.substr(14);
+        console.log(data);
+        return data
+    } catch(error){
+        return error
+    }
+}
+
 const findCp = async (provincia, localidad) =>{
     try{
         console.log(localidad);
         const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${localidad}/`);
+        console.log("hasta acá llegamos?")
         const $ = cheerio.load(html.data);
         const heading = $('p');
         const cp = heading.find('strong').text();
         const data = cp.slice(17, 21);
         return data
     } catch(error){
-        return error
+        return 
     }
 }
 
@@ -114,22 +137,28 @@ app.get('/cpv2', async (req, res) => {
 
     if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
 
-        let f = await findCp(provinciaData, localidadData);
-
-        if(f === ""){
-            f = await findCp(provinciaData, departamentoData);
+        try{
+            let f = await findCp(provinciaData, localidadData);
             if(f === ""){
-                f = await findCp(provinciaData, localidadCensalData);
+                console.log("Vengo a buscar por departamento");
+                f = await findCp(provinciaData, departamentoData);
                 if(f === ""){
-                    res.json("Mudate ami, imposible encontrar esto")
+                    console.log("Vengo a buscar por localidad_censal");
+                    f = await findCp(provinciaData, localidadCensalData);
+                    if(f === ""){
+                        res.json("Mudate ami, imposible encontrar esto")
+                    } else {
+                        res.json(f);
+                    }
                 } else {
-                    res.json(f);
+                    res.json(f);   
                 }
             } else {
-                res.json(f);   
+                res.json(f); 
             }
-        } else {
-            res.json(f); 
+        } catch (error){
+            console.log("algo paso loco");
+            res.json(error);
         }
         
 
@@ -217,6 +246,41 @@ app.get('/cpv2', async (req, res) => {
         let data = cp_capital[localidadData];
         res.json(data);
     }  
+})
+
+*/
+
+/* 
+
+API V1
+
+app.get('/cp', async (req, res) => {
+    console.log(req.query)
+    const { provincia, localidad } = req.query;
+    console.log(provincia)
+    console.log(localidad)
+    const provinciaData = provincia.replace(/\s/g, '').toLowerCase();
+    const localidadData = localidad.replace(/\s/g, '').toLowerCase();
+    if(provinciaData !== "ciudadautónomadebuenosaires"){
+        try{
+            const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provinciaData}/${localidadData}`);
+            const $ = cheerio.load(html.data);
+            const heading = $('.jumbotron');
+            const cp = heading.find('p.lead').text();
+            const data = cp.substr(14);
+            console.log(data);
+            res.json(data);
+        } catch(error){
+            res.status(404).json({
+                status: 'fail',
+                message: 'No encontramos el código postal de la localidad seleccionada'
+            });
+            res.json("No encontramos el código postal de la localidad seleccionada")
+        }
+    } else if(provinciaData === "ciudadautónomadebuenosaires"){
+        let data = cp_capital[localidadData];
+        res.json(data);
+    }    
 })
 
 */
