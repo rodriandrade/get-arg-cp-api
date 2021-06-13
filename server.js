@@ -99,10 +99,14 @@ app.get('/cpv2', async (req, res) => {
             const html = await axios.get(`https://codigo-postal.co/argentina/${provinciaData}/${localidadData}/`);
             const $ = cheerio.load(html.data);
             const heading = $('p');
-            console.log(heading[0]);
             const cp = heading.find('strong').text();
             const data = cp.slice(17, 21);
-            res.json(data);
+            if(data === ""){
+                const tryWithDeparment = await tryWithDepartamento(provinciaData, departamentoData);
+                res.json(tryWithDeparment);
+            } else{
+                res.json(data);
+            }
         } catch(error){
             tryWithDepartamento(provinciaData, departamentoData);
         }
@@ -118,18 +122,14 @@ app.listen(5000,() => {
 
 const tryWithDepartamento = async (provincia, departamento) =>{
     try{
+        console.log("Holis");
         const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${departamento}/`);
         const $ = cheerio.load(html.data);
         const heading = $('p');
-        console.log(heading[0]);
         const cp = heading.find('strong').text();
         const data = cp.slice(17, 21);
-        res.json(data);
+        return data
     } catch(error){
-        res.status(404).json({
-            status: 'fail',
-            message: 'No encontramos el código postal de la localidad seleccionada'
-        });
-        res.json("No encontramos el código postal de la localidad seleccionada")
+        return error
     }
 }
