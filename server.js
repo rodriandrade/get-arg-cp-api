@@ -385,7 +385,7 @@ const provincias = [
         ]
     },
     {
-        'nombre': 'Cordoba',
+        'nombre': 'Córdoba',
         'localidades': [
             {
                 'old': 'VILLA PASTROA',
@@ -646,7 +646,7 @@ const provincias = [
                 'new': 'Maquinista F Savio'
             },
             {
-                'old': 'MAQUINISTA F. SAVIO (ESTE)',
+                'old': 'MAQUINISTA F. SAVIO ESTE',
                 'new': 'Maquinista F Savio'
             },
             {
@@ -754,7 +754,11 @@ const provincias = [
                 'new': 'La Gloria'
             },
             {
-                'old': 'BARRIO EL CARMEN',
+                'old': 'BARRIO EL CARMEN (ESTE)',
+                'new': 'El Carmen'
+            },
+            {
+                'old': 'BARRIO EL CARMEN (OESTE)',
                 'new': 'El Carmen'
             },
             {
@@ -930,7 +934,7 @@ app.get('/', (req, res) =>{
 
 const findCp = async (provincia, localidad) =>{
     try{
-        //console.log(localidad);
+        console.log(localidad);
         const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${localidad}/`);
         const $ = cheerio.load(html.data);
         const heading = $('p');
@@ -968,10 +972,8 @@ app.get('/cpv2', async (req, res) => {
         return prov.nombre === provincia
     })
     const findLocalidad = provinciaToLoop.localidades.find(loc =>{
-        console.log(localidad)
         return loc.old === localidad
     })
-    console.log(findLocalidad)
     if(findLocalidad != null){
         const newLocalidad = findLocalidad.new;
         localidad = newLocalidad;
