@@ -967,9 +967,11 @@ app.get('/cpv2', async (req, res) => {
     const provinciaToLoop = provincias.find(prov =>{
         return prov.nombre === provincia
     })
-    const findLocalidad = provinciaToLoop.localidades.find(localidad =>{
-        return localidad === localidad.old
+    const findLocalidad = provinciaToLoop.localidades.find(loc =>{
+        console.log(localidad)
+        return loc.old === localidad
     })
+    console.log(findLocalidad)
     if(findLocalidad != null){
         const newLocalidad = findLocalidad.new;
         localidad = newLocalidad;
