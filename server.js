@@ -54,74 +54,891 @@ const cp_capital = {
     villasoldati: [1406, 1407, 1437]
 }
 
+const provincias = [
+    {
+        'nombre': 'Corrientes',
+        'localidades': [
+            {
+                'old': 'ESTACION TORRENT',
+                'new': 'Torrent'
+            },
+            {
+                'old': 'GOBERNADOR IGR.VALENTIN VIRASORO',
+                'new': 'Gobernador Virasoro'
+            },
+            {
+                'old': 'JOSE R. GOMEZ',
+                'new': 'Jose Rafael Gomez'
+            },
+            {
+                'old': 'MARIANO I. LOZA',
+                'new': 'Mariano I Loza Est Solari'
+            }
+        ]
+    },
+    {
+        'nombre': 'Jujuy',
+        'localidades': [
+            {
+                'old': 'LOS NOGALES',
+                'new': 'Nogales'
+            },
+        ]
+    },
+    {
+        'nombre': 'Santa Fé',
+        'localidades': [
+            {
+                'old': 'SALADERO MARIANO CABAL',
+                'new': 'Saladero M Cabal'
+            },
+            {
+                'old': 'RINCON POTRERO',
+                'new': 'Rincon Potreros'
+            },
+            {
+                'old': 'PUEBLO MARINI',
+                'new': 'Marini'
+            },
+            {
+                'old': 'PLAZA SAGUIER',
+                'new': 'Saguier'
+            },
+            {
+                'old': 'PLAZA MATILDE',
+                'new': 'Colonia Matilde'
+            },
+            {
+                'old': 'NUEVA LEHMANN',
+                'new': 'Lehmann'
+            },
+            {
+                'old': 'MONTEFIORE',
+                'new': 'Colonia Montefiore'
+            },
+            {
+                'old': 'MATILDE',
+                'new': 'Colonia Matilde'
+            },
+            {
+                'old': 'LOS ZAPALLOS',
+                'new': 'Colonia Los Zapallos'
+            },
+            {
+                'old': 'LA ISLETA',
+                'new': 'Isleta'
+            },
+            {
+                'old': 'JOSEFINA',
+                'new': 'La Josefina'
+            },
+            {
+                'old': 'HUMBERTO PRIMO',
+                'new': 'Humberto Primero'
+            },
+            {
+                'old': 'CORONEL RODOLFO S. DOMINGUEZ',
+                'new': 'Coronel Dominguez'
+            },
+            {
+                'old': 'CHRISTOPHERSEN',
+                'new': 'Estacion Christophersen'
+            },
+            {
+                'old': 'BERAVEBU',
+                'new': 'Berabevu'
+            },
+            {
+                'old': 'BARRIOS ACAPULCO Y VERACRUZ',
+                'new': 'La Josefina'
+            },
+            {
+                'old': 'BARRIOS ACAPULCO Y VERACRUZ',
+                'new': 'La Josefina'
+            },
+            
+        ]
+    },
+    {
+        'nombre': 'Neuquén',
+        'localidades': [
+            {
+                'old': 'VILLA DEL NAHUEVE',
+                'new': 'Nahueve'
+            },
+            {
+                'old': 'EL CHOCON',
+                'new': 'Villa el Chocon'
+            },
+            {
+                'old': 'BARRIO RUCA LUHE',
+                'new': 'Vista Alegre Norte'
+            },
+        ]
+    },
+    {
+        'nombre': 'Salta',
+        'localidades': [
+            {
+                'old': 'SANTA ROSA DE LOS PASTOS GRANDES',
+                'new': 'Sta Rosa de los Pastos Grandes'
+            },
+            {
+                'old': 'PROFESOR SALVADOR MAZZA',
+                'new': 'Salvador Mazza'
+            },
+            {
+                'old': 'PADRE LOZANO',
+                'new': 'Pedro Lozano'
+            },
+            {
+                'old': 'Pacara',
+                'new': 'El Pacara'
+            },
+            {
+                'old': 'OLACAPATO',
+                'new': 'Olacapato Grande'
+            },
+            {
+                'old': 'LA CALDERA',
+                'new': 'Caldera'
+            },
+            {
+                'old': 'HICKMAN',
+                'new': 'Hickmann'
+            },
+            {
+                'old': 'GENERAL MOSCONI',
+                'new': 'General Enrique Mosconi'
+            },
+            {
+                'old': 'CAPIAZUTI',
+                'new': 'Capiazutti'
+            },
+            {
+                'old': 'BARRIO SAN RAFAEL',
+                'new': 'San Rafael'
+            },
+        ]
+    },
+    {
+        'nombre': 'Formosa',
+        'localidades': [
+            {
+                'old': 'VILLA GENERAL MANUEL BELGRANO',
+                'new': 'General Manuel Belgrano'
+            },
+            {
+                'old': 'SAN MARTIN II',
+                'new': 'San Martin 2'
+            },
+            {
+                'old': 'SAN MARTIN I',
+                'new': 'San Martin 1'
+            },
+            {
+                'old': 'POSTA CAMBIO ZALAZAR',
+                'new': 'Posta Cambio a Zalazar'
+            },
+            {
+                'old': 'INGENIERO GUILLERMO N. JUAREZ',
+                'new': 'Ing Guillermo N Juarez'
+            },
+            {
+                'old': 'GENERAL MOSCONI',
+                'new': 'General Enrique Mosconi'
+            },
+            {
+                'old': 'GENERAL LUCIO V MANSILLA',
+                'new': 'Gral Lucio V Mansilla'
+            },
+            {
+                'old': 'FORTIN SARGENTO 1° LEYES',
+                'new': 'Fortin Sargento 1Ro Leyes'
+            },
+            {
+                'old': 'FORTIN CABO 1° LUGONES',
+                'new': 'Fortin Cabo 1Ro Lugones'
+            },
+        ]
+    },
+    {
+        'nombre': 'Misiones',
+        'localidades': [
+            {
+                'old': 'PUERTO DESEADO',
+                'new': 'Deseado'
+            },
+            {
+                'old': 'OLEGARIO V. ANDRADE',
+                'new': 'Olegario Victor Andrade'
+            },
+            {
+                'old': 'KILOMETRO 17 (RUTA 8)',
+                'new': 'Kilometro 17 Ruta 8'
+            },
+            {
+                'old': 'CAPIOVICIÑO',
+                'new': 'Capiovisiño'
+            },
+            {
+                'old': 'CABUREI',
+                'new': 'Cabure'
+            },
+            {
+                'old': 'CAA - YARI',
+                'new': 'Caa Yari'
+            },
+            {
+                'old': 'BARRIO NUEVO GARUPA',
+                'new': 'Garupa'
+            },
+        ]
+    },
+    {
+        'nombre': 'San Luis',
+        'localidades': [
+            {
+                'old': 'ZANJITAS',
+                'new': 'Estación Zanjitas'
+            },
+            {
+                'old': 'SANTA ROSA DEL CONLARA',
+                'new': 'Santa Rosa de Conlara'
+            },
+            {
+                'old': 'CAZADOR',
+                'new': 'El Cazador'
+            },
+            {
+                'old': 'CAPIOVICIÑO',
+                'new': 'Capiovisiño'
+            },
+            {
+                'old': 'CABUREI',
+                'new': 'Cabure'
+            },
+            {
+                'old': 'CAA - YARI',
+                'new': 'Caa Yari'
+            },
+            {
+                'old': 'BARRIO NUEVO GARUPA',
+                'new': 'Garupa'
+            },
+        ]
+    },
+    {
+        'nombre': 'Entre Rios',
+        'localidades': [
+            {
+                'old': 'VILLA GOBERNADOR LUIS F. ETCHEVEHERE',
+                'new': 'Villa Gob Luis Etchevehere'
+            },
+            {
+                'old': 'MACIA',
+                'new': 'Gobernador Macia'
+            },
+            {
+                'old': 'ALTAMIRANO SUR',
+                'new': 'Altamirano Sud'
+            }
+        ]
+    },
+    {
+        'nombre': 'Santa Cruz',
+        'localidades': [
+            {
+                'old': 'YACIMIENTOS RIO TURBIO',
+                'new': 'Rio Turbio'
+            }
+        ]
+    },
+    {
+        'nombre': 'Río Negro',
+        'localidades': [
+            {
+                'old': 'LAS GRUTAS',
+                'new': 'Balneario las Grutas'
+            },
+            {
+                'old': 'INGENIERO LUIS A. HUERGO',
+                'new': 'Ingeniero Huergo'
+            },
+            {
+                'old': 'EL CONDOR',
+                'new': 'Balneario El Condor'
+            },
+            {
+                'old': 'CORONEL BELISLE',
+                'new': 'Belisle Coronel'
+            }
+        ]
+    },
+    {
+        'nombre': 'Chubut',
+        'localidades': [
+            {
+                'old': 'QUINTA EL MIRADOR',
+                'new': 'El Mirador'
+            },
+        ]
+    },
+    {
+        'nombre': 'Cordoba',
+        'localidades': [
+            {
+                'old': 'VILLA PASTROA',
+                'new': 'Est Juarez Celman'
+            },
+            {
+                'old': 'VILLA OESTE',
+                'new': 'Villa Nueva'
+            },
+            {
+                'old': 'VILLA LOS LLANOS',
+                'new': 'Est Juarez Celman'
+            },
+            {
+                'old': 'VILLA LA RIVERA',
+                'new': 'Villa Quillinzo'
+            },
+            {
+                'old': 'VILLA DEL TRANSITO',
+                'new': 'Transito'
+            },
+            {
+                'old': 'VILLA CIUDAD PARQUE LOS REARTES',
+                'new': 'Villa Ciudad Pque los Reartes'
+            },
+            {
+                'old': 'VILLA CIUDAD DE AMERICA (LOTEO DIEGO DE',
+                'new': 'Villa Ciudad de America'
+            },
+            {
+                'old': 'SOLAR DE LOS MOLINOS',
+                'new': 'SOLAR LOS MOLINOS'
+            },
+            {
+                'old': 'SILVIO PELLICO',
+                'new': 'Colonia Silvio Pellico'
+            },
+            {
+                'old': 'SATURNINO MARIA LASPIUR',
+                'new': 'Saturnino M Laspiur'
+            },
+            {
+                'old': 'SAN IGNACIO (LOTEO VELEZ CRESPO)',
+                'new': 'San Ignacio'
+            },
+            {
+                'old': 'SAN IGNACIO (LOTEO SAN JAVIER)',
+                'new': 'San Ignacio'
+            },
+            {
+                'old': 'SAN FRANCISCO DEL CHAÑAR',
+                'new': 'San Francisco del Chaaar'
+            },
+            {
+                'old': 'SAN FRANCISCO DEL CHAÑAR',
+                'new': 'San Francisco del Chaaar'
+            },
+            {
+                'old': 'SAN CARLOS MINAS',
+                'new': 'San Carlos'
+            },
+            {
+                'old': 'PORTEÑA',
+                'new': 'Porteaa'
+            },
+            {
+                'old': 'PLAZA LUXARDO',
+                'new': 'Luxardo'
+            },
+            {
+                'old': 'PARQUE NORTE',
+                'new': 'Est Juarez Celman'
+            },
+            {
+                'old': 'ORDOÑEZ',
+                'new': 'Ordoaez'
+            },
+            {
+                'old': 'MONTE LEÑA',
+                'new': 'Monte Leaa'
+            },
+            {
+                'old': 'LAS CAÑADAS',
+                'new': 'Las Caaadas'
+            },
+            {
+                'old': 'LA TORDILLA',
+                'new': 'Colonia La Tordilla'
+            },
+            {
+                'old': 'GUIÑAZU NORTE',
+                'new': 'El Carmen Guiaazu'
+            },
+            {
+                'old': 'ESTACION LUXARDO',
+                'new': 'Luxardo'
+            },
+            {
+                'old': 'EL ARAÑADO',
+                'new': 'El Araaado'
+            },
+            {
+                'old': 'DALMACIO VELEZ',
+                'new': 'Dalmacio Velez Sarsfield'
+            },
+            {
+                'old': 'CIUDAD DE LOS NIÑOS',
+                'new': 'Est Juarez Celman'
+            },
+            {
+                'old': 'CHUÑA HUASI',
+                'new': 'Chuaa Huasi'
+            },
+            {
+                'old': 'CHUÑA',
+                'new': 'Chuaa'
+            },
+            {
+                'old': 'CHAÑAR VIEJO',
+                'new': 'Chaaar Viejo'
+            },
+            {
+                'old': 'CAPITAN GENERAL BERNARDO O`HIGGINS',
+                'new': 'Cap Gral Bernardo o Higgins'
+            },
+            {
+                'old': 'CAÑADA DEL SAUCE',
+                'new': 'Caaada del Sauce'
+            },
+            {
+                'old': 'CAÑADA DE RIO PINTO',
+                'new': 'Caaada de Rio Pinto'
+            },
+            {
+                'old': 'CAÑADA DE MACHADO',
+                'new': 'Caaada de Machado'
+            },
+            {
+                'old': 'CAÑADA DE LUQUE',
+                'new': 'Caaada de Luque'
+            },
+            {
+                'old': 'BARRIO GILBERT (1° DE MAYO)',
+                'new': 'Santa Maria Centro'
+            },
+            {
+                'old': 'BAÑADO DE SOTO',
+                'new': 'Baaado de Soto'
+            },
+            {
+                'old': 'ALMIRANTE BROWN',
+                'new': 'Est Juarez Celman'
+            },
+            {
+                'old': '1 DE AGOSTO',
+                'new': 'Est Juarez Celman'
+            },
+        ]
+    },
+    {
+        'nombre': 'Mendoza',
+        'localidades': [
+            {
+                'old': 'PRESIDENTE SARMIENTO',
+                'new': 'Sarmiento'
+            },
+            {
+                'old': 'EL PARAMILLO',
+                'new': 'Paramillo'
+            },
+            {
+                'old': 'BARRIO PRIMAVERA',
+                'new': 'La Primavera'
+            },
+            {
+                'old': '1A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '2A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '3A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '4A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '5A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '6A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '7A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '8A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '9A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '10A. SECCION',
+                'new': 'Mendoza'
+            },
+            {
+                'old': '11A. SECCION',
+                'new': 'Mendoza'
+            },
+        ]
+    },
+    {
+        'nombre': 'Buenos Aires',
+        'localidades': [
+            {
+                'old': 'WILLIAM C. MORRIS',
+                'new': 'William Morris'
+            },
+            {
+                'old': 'VI¥A',
+                'new': 'Viña'
+            },
+            {
+                'old': 'VILLA JOSE LEON SUAREZ',
+                'new': 'Jose Leon Suarez'
+            },
+            {
+                'old': 'VILLA FLANDRIA SUR (EST. JAUREGUI)',
+                'new': 'Est Jauregui Va Flandria'
+            },
+            {
+                'old': 'VILLA FLANDRIA NORTE (PUEBLO NUEVO)',
+                'new': 'Pueblo Nuevo'
+            },
+            {
+                'old': 'VILLA BOSCH (EST. JUAN MARIA BOSCH)',
+                'new': 'Villa Bosch'
+            },
+            {
+                'old': 'SAENZ PEÑA',
+                'new': 'Villa Saenz Peña'
+            },
+            {
+                'old': 'ROBERTO J. PAYRO',
+                'new': 'Roberto Payro'
+            },
+            {
+                'old': 'MAQUINISTA F. SAVIO (OESTE)',
+                'new': 'Maquinista F Savio'
+            },
+            {
+                'old': 'MAQUINISTA F. SAVIO (ESTE)',
+                'new': 'Maquinista F Savio'
+            },
+            {
+                'old': 'LUCILA DEL MAR',
+                'new': 'La Lucila del Mar'
+            },
+            {
+                'old': 'JUAN A. PRADERA',
+                'new': 'Pradere Juan a'
+            },
+            {
+                'old': 'JUAN A. DE LA PE¥A',
+                'new': 'Juana a de la Peña'
+            },
+            {
+                'old': 'JOSE MARIA EZEIZA',
+                'new': 'Jose Maria Ezeiza'
+            },
+            {
+                'old': 'JOSE C. PAZ',
+                'new': 'Jose Clemente Paz'
+            },
+            {
+                'old': 'ISLA SANTIAGO (OESTE)',
+                'new': 'Isla Santiago'
+            },
+            {
+                'old': 'GOBERNADOR JULIO A. COSTA',
+                'new': 'Gobernador Costa'
+            },
+            {
+                'old': 'GENERAL LA MADRID',
+                'new': 'General Lamadrid'
+            },
+            {
+                'old': 'GENERAL JUAN MADARIAGA',
+                'new': 'General Madariaga'
+            },
+            {
+                'old': 'ESTACION CHAPADMALAL',
+                'new': 'Barrio Chapadmalal'
+            },
+            {
+                'old': 'ESPARTILLAR (E)',
+                'new': 'Espartillar'
+            },
+            {
+                'old': 'EMILIO V. BUNGE',
+                'new': 'Emilio Bunge'
+            },
+            {
+                'old': 'EL CAZADOR',
+                'new': 'Barrio el Cazador'
+            },
+            {
+                'old': 'DON ORIONE',
+                'new': 'Claypole'
+            },
+            {
+                'old': "D'ORBIGNY",
+                'new': 'D Orbigny'
+            },
+            {
+                'old': 'COUNTRY LOS MEDANOS',
+                'new': 'Medanos'
+            },
+            {
+                'old': 'CONESA',
+                'new': 'General Conesa'
+            },
+            {
+                'old': 'COLONIA SAN ADOLFO',
+                'new': 'San Adolfo'
+            },
+            {
+                'old': 'CIUDAD JARDIN LOMAS DEL PALOMAR',
+                'new': 'Ciudad Jardín del Palomar'
+            },
+            {
+                'old': 'CHAPADMALAL',
+                'new': 'Barrio Chapadmalal'
+            },
+            {
+                'old': 'CERRO DE LA GLORIA (CANAL 15)',
+                'new': 'Canal 15 Cerro de la Gloria'
+            },
+            {
+                'old': "CA¥UELAS",
+                'new': 'Cañuelas'
+            },
+            {
+                'old': 'CA¥ADA SECA',
+                'new': 'Cañada Seca'
+            },
+            {
+                'old': 'CAPILLA DEL SE¥OR',
+                'new': 'Capilla del Señor'
+            },
+            {
+                'old': 'BATAN',
+                'new': 'Barrio Batan'
+            },
+            {
+                'old': 'BARRIO LA GLORIA',
+                'new': 'La Gloria'
+            },
+            {
+                'old': 'BARRIO EL CARMEN',
+                'new': 'El Carmen'
+            },
+            {
+                'old': 'BARRIO EL BOQUERON',
+                'new': 'El Boqueron'
+            },
+            {
+                'old': 'BARRIO AMERICA UNIDA',
+                'new': 'America Unida'
+            },
+            {
+                'old': 'BALNEARIO PEHUEN CO',
+                'new': 'Pehuen Co'
+            },
+            {
+                'old': 'ARRIBE¥OS',
+                'new': 'Arribeños'
+            },
+            {
+                'old': 'ALBERI VIEJO',
+                'new': 'Leandro N Alem'
+            },
+            {
+                'old': 'AEROPUERTO INTERNACIONAL EZEIZA',
+                'new': 'Aeropuerto Ezeiza'
+            },
+        ]
+    },
+    {
+        'nombre': 'Santiago del Estero',
+        'localidades': [
+            {
+                'old': 'VILLA TURISTICA DEL EMBALSE',
+                'new': 'Villa Rio Hondo'
+            },
+            {
+                'old': 'VILLA MAILIN',
+                'new': 'El Mailin'
+            },
+            {
+                'old': 'VILLA GIMENEZ',
+                'new': 'Villa Jimenez'
+            },
+            {
+                'old': 'VILLA GENERAL MITRE',
+                'new': 'Pinto Villa General Mitre'
+            },
+            {
+                'old': 'LOS SORIA',
+                'new': 'Rodeo de Soria'
+            },
+            {
+                'old': 'LOS MIRANDA',
+                'new': 'Villa Rio Hondo'
+            },
+            {
+                'old': 'LOS CARDOZOS',
+                'new': 'Cardozos'
+            },
+            {
+                'old': 'LA NUEVA DONOSA',
+                'new': 'La Donosa'
+            },
+            {
+                'old': 'ESTACION TACAÑITAS',
+                'new': 'TACAÑITAS'
+            },
+            {
+                'old': 'EL ZANJON',
+                'new': 'VILLA ZANJON'
+            },
+            {
+                'old': 'CORONEL MANUEL L. RICO',
+                'new': 'Coronel Manuel Leoncio Rico'
+            },
+        ]
+    },
+    {
+        'nombre': 'La Pampa',
+        'localidades': [
+            {
+                'old': 'TOMAS M. ANCHORENA',
+                'new': 'Tomas M de Anchorena'
+            },
+            {
+                'old': 'LOVENTUE',
+                'new': 'Loventuel'
+            },
+            {
+                'old': 'GENERAL MANUEL J. CAMPOS',
+                'new': 'Gral Manuel Campos'
+            }
+        ]
+    },
+    {
+        'nombre': 'Catamarca',
+        'localidades': [
+            {
+                'old': 'ADOLFO E. CARRANZA',
+                'new': 'Adolfo E Carranza'
+            },
+            {
+                'old': 'VILLA DE BALCOZNA',
+                'new': 'San Antonio de Paclin'
+            },
+            {
+                'old': 'SAN FERNANDO DEL VALLE DE CATAMARCA',
+                'new': 'San Fdo Del Valle de Catamarca'
+            },
+            {
+                'old': 'POMANCILLO ESTE',
+                'new': 'Pomancillo'
+            },
+            {
+                'old': 'POMANCILLO OESTE',
+                'new': 'Pomancillo'
+            },
+            {
+                'old': 'EL PANTANILLO',
+                'new': 'San Fdo Del Valle de Catamarca'
+            },
+            {
+                'old': 'EL DIVISADERO',
+                'new': 'Divisadero'
+            }
+        ]
+    },
+    {
+        'nombre': 'La Rioja',
+        'localidades': [
+            {
+                'old': 'SHAQUI',
+                'new': 'Schaqui'
+            },
+            {
+                'old': 'SAN BLAS',
+                'new': 'Salicas'
+            },
+            {
+                'old': 'PORTEZUELO',
+                'new': 'El Portezuelo'
+            }
+        ]
+    },
+    {
+        'nombre': 'San Juan',
+        'localidades': [
+            {
+                'old': 'VILLA EL SALVADOR',
+                'new': 'Angaco Norte'
+            },
+            {
+                'old': 'VILLA SEFAIR',
+                'new': 'Talacasto'
+            },
+            {
+                'old': 'VILLA AMPACAMA',
+                'new': 'Ampacama'
+            },
+            {
+                'old': 'EL ENCON',
+                'new': 'Encon'
+            }
+        ]
+    }
+];
+
 app.use(express.json());
 
 app.get('/', (req, res) =>{
     res.send("Welcome to the arg-cp API!");
 })
 
-app.get('/cp', async (req, res) => {
-    const { provincia, localidad, departamento, localidad_censal } = req.query;
-    const provinciaData = provincia.replace(/\s+/g, '-').toLowerCase();
-    const localidadData = localidad.replace(/\s+/g, '-').toLowerCase();
-    const departamentoData = departamento.replace(/\s+/g, '-').toLowerCase();
-    const localidadCensalData = localidad_censal.replace(/\s+/g, '-').toLowerCase();
-
-    if(provinciaData !== "ciudadautónomadebuenosaires"){
-        
-        try{
-            let f = await findCp2(provinciaData, localidadData);
-            if(f === ""){
-                f = await findCp2(provinciaData, departamentoData);
-                if(f === ""){
-                    f = await findCp2(provinciaData, localidadCensalData);
-                    if(f === ""){
-                        res.json("Mudate ami, imposible encontrar esto")
-                    } else {
-                        res.json(f);
-                    }
-                } else {
-                    res.json(f);   
-                }
-            } else {
-                res.json(f); 
-            }
-        } catch (error){
-            res.json(error)
-        }
-
-    } else if(provinciaData === "ciudadautónomadebuenosaires"){
-        let data = cp_capital[localidadData];
-        res.json(data);
-    }    
-})
-
-const findCp2 = async (provincia, localidad) =>{
-    try{
-        console.log(localidad);
-        const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provincia}/${localidad}`);
-        const $ = cheerio.load(html.data);
-        const heading = $('.jumbotron');
-        const cp = heading.find('p.lead').text();
-        const data = cp.substr(14);
-        console.log(data);
-        return data
-    } catch(error){
-        return error
-    }
-}
-
 const findCp = async (provincia, localidad) =>{
     try{
-        console.log(localidad);
+        //console.log(localidad);
         const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${localidad}/`);
         const $ = cheerio.load(html.data);
         const heading = $('p');
         const cp = heading.find('strong').text();
         const data = cp.slice(17, 21);
-        console.log(data);
+        //console.log(data);
         const checkCp = isNaN(data); // Si devuelve "TRUE" significa que el string no contiene un número. Si devuelve "FALSE", es posible que el string contenga un número valido.
-        console.log(checkCp);
+        //console.log(checkCp);
 
         if(checkCp){ // Si es true, entonces busca en la tabla la lista de CPS. Si es false, retorna el cp.
             let cps = [];
@@ -141,39 +958,52 @@ const findCp = async (provincia, localidad) =>{
 app.get('/cpv2', async (req, res) => {
 
     console.log(req.query);
-    const { provincia, localidad, departamento, localidad_censal, municipio } = req.query;
+
+    //////////////////
+
+    let { provincia, localidad, departamento, localidad_censal, municipio } = req.query;
+
+    // Chequear excepciones para las localidades
+    const provinciaToLoop = provincias.find(prov =>{
+        return prov.nombre === provincia
+    })
+    const findLocalidad = provinciaToLoop.localidades.find(localidad =>{
+        return localidad === localidad.old
+    })
+    if(findLocalidad != null){
+        const newLocalidad = findLocalidad.new;
+        localidad = newLocalidad;
+    }
+
+    // Convertir strings para acoplarse al formato aceptado en la URL de la web a la que se hace scrapping
     const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
     const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
     const departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
     const localidadCensalQuery = localidad_censal.replace(/\s+/g, '-').toLowerCase();
     let municipioQuery;
-
     if(municipio){
         municipioQuery = municipio.replace(/\s+/g, '-').toLowerCase();
     }
-
-    const provinciaData = removeAccents(provinciaQuery);
-    const localidadData = removeAccents(localidadQuery);
-    const departamentoData = removeAccents(departamentoQuery);
-    const localidadCensalData = removeAccents(localidadCensalQuery);
+    const provinciaData = removeSignsFromString(provinciaQuery);
+    let localidadData = removeSignsFromString(localidadQuery);
+    const departamentoData = removeSignsFromString(departamentoQuery);
+    const localidadCensalData = removeSignsFromString(localidadCensalQuery);
     let municipioData;
-
     if(municipioQuery){
-        municipioData = removeAccents(municipioQuery);
+        municipioData = removeSignsFromString(municipioQuery);
     }
-
+    
     if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
-
         try{
             let f = await findCp(provinciaData, localidadData);
             if(f === ""){
-                console.log("Vengo a buscar por departamento");
+                //console.log("Vengo a buscar por departamento");
                 f = await findCp(provinciaData, departamentoData);
                 if(f === ""){
-                    console.log("Vengo a buscar por localidad_censal");
+                    //console.log("Vengo a buscar por localidad_censal");
                     f = await findCp(provinciaData, localidadCensalData);
                     if(f === ""){
-                        console.log("Vengo a buscar por municipio");
+                        //console.log("Vengo a buscar por municipio");
                         f = await findCp(provinciaData, municipioData);
                         if(f === ""){
                             res.json("Mudate ami, imposible encontrar esto");
@@ -193,8 +1023,6 @@ app.get('/cpv2', async (req, res) => {
             console.log("algo paso loco");
             res.json(error);
         }
-        
-
     } else if(provinciaData === "ciudad-autónoma-de-buenos-aires"){
         let data = cp_capital[localidadData];
         res.json(data);
@@ -202,123 +1030,14 @@ app.get('/cpv2', async (req, res) => {
 
 })
 
-const removeAccents = (str) => {
-    // checkedNew = checked.replace(/\./g, ""); SACAR PUNTOS
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const removeSignsFromString = (str) => {
+    let a = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let b = a.replace(/\./g, "");
+    let c = b.replace(/\'/g, "");
+    return c
 } 
 
 app.listen(5000,() => {
     console.log('Started on PORT 5000');
 })
 
-
-
-/*
-const tryWithDepartamento = async (provincia, departamento) =>{
-    try{
-        console.log("Busqué por departamento");
-        const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${departamento}/`);
-        const $ = cheerio.load(html.data);
-        const heading = $('p');
-        const cp = heading.find('strong').text();
-        const data = cp.slice(17, 21);
-        return data
-    } catch(error){
-        return error
-    }
-}
-
-const tryWithLocalidadCensal = async (provincia, localidad_censal) =>{
-    try{
-        console.log("Busqué por localidad");
-        const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${localidad_censal}/`);
-        const $ = cheerio.load(html.data);
-        const heading = $('p');
-        const cp = heading.find('strong').text();
-        const data = cp.slice(17, 21);
-        console.log(data);
-        return data
-    } catch(error){
-        return error
-    }
-}
-
-/*
-
-app.get('/cpv2', async (req, res) => {
-    const { provincia, localidad, departamento, localidad_censal } = req.query;
-    const provinciaData = provincia.replace(/\s+/g, '-').toLowerCase();
-    const localidadData = localidad.replace(/\s+/g, '-').toLowerCase();
-    const departamentoData = departamento.replace(/\s+/g, '-').toLowerCase();
-    const localidadCensalData = localidad_censal.replace(/\s+/g, '-').toLowerCase();
-    if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
-        try{
-            const html = await axios.get(`https://codigo-postal.co/argentina/${provinciaData}/${localidadData}/`);
-            const $ = cheerio.load(html.data);
-            const heading = $('p');
-            const cp = heading.find('strong').text();
-            const data = cp.slice(17, 21);
-            if(data === ""){
-                const tryWithDeparment = await tryWithDepartamento(provinciaData, departamentoData);
-                console.log(tryWithDeparment);
-                if(tryWithDeparment === ""){
-                    console.log("JAJAJ");
-                    const tryWithLocalidadCensal = await tryWithLocalidadCensal(provinciaData, localidadCensalData);
-                    console.log("boquita");
-                    console.log(tryWithLocalidadCensal);
-                    res.json(tryWithLocalidadCensal)
-                } else {
-                    res.json(tryWithDeparment);
-                }
-            } else{
-                res.json(data);
-            }
-        } catch(error){
-            
-            tryWithDepartamento(provinciaData, departamentoData);
-        
-           tryWithLocalidadCensal(provinciaData, localidadCensalData);
-            
-        }
-    } else if(provinciaData === "ciudad-autónoma-de-buenos-aires"){
-        let data = cp_capital[localidadData];
-        res.json(data);
-    }  
-})
-
-*/
-
-/* 
-
-API V1
-
-app.get('/cp', async (req, res) => {
-    console.log(req.query)
-    const { provincia, localidad } = req.query;
-    console.log(provincia)
-    console.log(localidad)
-    const provinciaData = provincia.replace(/\s/g, '').toLowerCase();
-    const localidadData = localidad.replace(/\s/g, '').toLowerCase();
-    if(provinciaData !== "ciudadautónomadebuenosaires"){
-        try{
-            const html = await axios.get(`https://codigopostal.com.ar/site/manual/${provinciaData}/${localidadData}`);
-            const $ = cheerio.load(html.data);
-            const heading = $('.jumbotron');
-            const cp = heading.find('p.lead').text();
-            const data = cp.substr(14);
-            console.log(data);
-            res.json(data);
-        } catch(error){
-            res.status(404).json({
-                status: 'fail',
-                message: 'No encontramos el código postal de la localidad seleccionada'
-            });
-            res.json("No encontramos el código postal de la localidad seleccionada")
-        }
-    } else if(provinciaData === "ciudadautónomadebuenosaires"){
-        let data = cp_capital[localidadData];
-        res.json(data);
-    }    
-})
-
-*/
