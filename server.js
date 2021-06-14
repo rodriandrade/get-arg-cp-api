@@ -123,7 +123,7 @@ const findCp = async (provincia, localidad) =>{
         const checkCp = isNaN(data); // Si devuelve "TRUE" significa que el string no contiene un número. Si devuelve "FALSE", es posible que el string contenga un número valido.
         console.log(checkCp);
 
-        if(checkCp || data === ""){ // Si es true, entonces busca en la tabla la lista de CPS. Si es false, retorna el cp.
+        if(checkCp){ // Si es true, entonces busca en la tabla la lista de CPS. Si es false, retorna el cp.
             let cps = [];
             $("td:nth-child(3)").each((index, element) => {
                 cps.push($(element).text())
