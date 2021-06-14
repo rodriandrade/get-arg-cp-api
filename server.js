@@ -113,17 +113,17 @@ const findCp2 = async (provincia, localidad) =>{
 
 const findCp = async (provincia, localidad) =>{
     try{
-
+        console.log(localidad);
         const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${localidad}/`);
         const $ = cheerio.load(html.data);
         const heading = $('p');
         const cp = heading.find('strong').text();
         const data = cp.slice(17, 21);
-
+        console.log(data);
         const checkCp = isNaN(data); // Si devuelve "TRUE" significa que el string no contiene un número. Si devuelve "FALSE", es posible que el string contenga un número valido.
         console.log(checkCp);
 
-        if(checkCp){ // Si es true, entonces busca en la tabla la lista de CPS. Si es false, retorna el cp.
+        if(checkCp || data === ""){ // Si es true, entonces busca en la tabla la lista de CPS. Si es false, retorna el cp.
             let cps = [];
             $("td:nth-child(3)").each((index, element) => {
                 cps.push($(element).text())
