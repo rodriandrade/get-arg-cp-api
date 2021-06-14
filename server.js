@@ -329,7 +329,7 @@ const provincias = [
         ]
     },
     {
-        'nombre': 'Entre Rios',
+        'nombre': 'Entre Ríos',
         'localidades': [
             {
                 'old': 'VILLA GOBERNADOR LUIS F. ETCHEVEHERE',
@@ -382,13 +382,17 @@ const provincias = [
                 'old': 'QUINTA EL MIRADOR',
                 'new': 'El Mirador'
             },
+            {
+                'old': 'ASTRA',
+                'new': 'Barrio Astra'
+            },
         ]
     },
     {
         'nombre': 'Córdoba',
         'localidades': [
             {
-                'old': 'VILLA PASTROA',
+                'old': 'VILLA PASTORA',
                 'new': 'Est Juarez Celman'
             },
             {
