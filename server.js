@@ -936,6 +936,7 @@ app.get('/', (req, res) =>{
     res.send("Welcome to the arg-cp API!");
 })
 
+// Función para buscar CP 
 const findCp = async (provincia, localidad) =>{
     try{
         console.log(localidad);
@@ -963,45 +964,70 @@ const findCp = async (provincia, localidad) =>{
     }
 }
 
+// Endpoint para averiguar el CP de una localidad
 app.get('/cpv2', async (req, res) => {
 
     console.log(req.query);
-
-    //////////////////
-
     let { provincia, localidad, departamento, localidad_censal, municipio } = req.query;
+    
+    // EXCEPCIONES ///////
+
+    let findLocalidad;
 
     // Chequear excepciones para las localidades
     const provinciaToLoop = provincias.find(prov =>{
         return prov.nombre === provincia
     })
-    const findLocalidad = provinciaToLoop.localidades.find(loc =>{
-        return loc.old === localidad
-    })
+
+    if(provinciaToLoop != null){
+        findLocalidad = provinciaToLoop.localidades.find(loc =>{
+            return loc.old === localidad
+        })
+    }
+
     if(findLocalidad != null){
         const newLocalidad = findLocalidad.new;
         localidad = newLocalidad;
     }
 
+    ///////////
+
     // Convertir strings para acoplarse al formato aceptado en la URL de la web a la que se hace scrapping
     const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
     const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
-    const departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
-    const localidadCensalQuery = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+
+    let departamentoQuery;
+    let localidadCensalQuery;
     let municipioQuery;
+
+    if(departamento){
+        departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
+    }
+    if(localidad_censal){
+        localidadCensalQuery = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+    }
     if(municipio){
         municipioQuery = municipio.replace(/\s+/g, '-').toLowerCase();
     }
+
     const provinciaData = removeSignsFromString(provinciaQuery);
-    let localidadData = removeSignsFromString(localidadQuery);
-    const departamentoData = removeSignsFromString(departamentoQuery);
-    const localidadCensalData = removeSignsFromString(localidadCensalQuery);
+    const localidadData = removeSignsFromString(localidadQuery);
+
+    let departamentoData;
+    let localidadCensalData;
     let municipioData;
+
+    if(departamentoQuery){
+        departamentoData = removeSignsFromString(departamentoQuery);
+    }
+    if(localidadCensalQuery){
+        localidadCensalData = removeSignsFromString(localidadCensalQuery);
+    }
     if(municipioQuery){
         municipioData = removeSignsFromString(municipioQuery);
     }
     
-    if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
+    if(provinciaData !== "ciudad-autonoma-de-buenos-aires"){
         try{
             let f = await findCp(provinciaData, localidadData);
             if(f === ""){
@@ -1031,35 +1057,56 @@ app.get('/cpv2', async (req, res) => {
             console.log("algo paso loco");
             res.json(error);
         }
-    } else if(provinciaData === "ciudad-autónoma-de-buenos-aires"){
+    } else if(provinciaData === "ciudad-autonoma-de-buenos-aires"){
         let data = cp_capital[localidadData];
         res.json(data);
     }  
 
 })
 
+// Endpoint para validar CP
 app.get('/validate', async (req, res) => {
     let { provincia, localidad, departamento, localidad_censal, municipio, codigo_postal } = req.query;
+
+    // Convertir strings para acoplarse al formato aceptado en la URL de la web a la que se hace scrapping
     const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
     const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
-    const departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
-    const localidadCensalQuery = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+
+    let departamentoQuery;
+    let localidadCensalQuery;
     let municipioQuery;
+    
+    if(departamento){
+        departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
+    }
+    if(localidad_censal){
+        localidadCensalQuery = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+    }
     if(municipio){
         municipioQuery = municipio.replace(/\s+/g, '-').toLowerCase();
     }
+
     const provinciaData = removeSignsFromString(provinciaQuery);
-    let localidadData = removeSignsFromString(localidadQuery);
-    const departamentoData = removeSignsFromString(departamentoQuery);
-    const localidadCensalData = removeSignsFromString(localidadCensalQuery);
+    const localidadData = removeSignsFromString(localidadQuery);
+
+    let departamentoData;
+    let localidadCensalData;
     let municipioData;
+
+    if(departamentoQuery){
+        departamentoData = removeSignsFromString(departamentoQuery);
+    }
+    if(localidadCensalQuery){
+        localidadCensalData = removeSignsFromString(localidadCensalQuery);
+    }
     if(municipioQuery){
         municipioData = removeSignsFromString(municipioQuery);
     }
 
-    let cp2;
+    let cp2 = [];
+    let validateCP;
 
-    if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
+    if(provinciaData !== "ciudad-autonoma-de-buenos-aires"){
         try{
             let f = await findCp(provinciaData, localidadData);
             if(f === ""){
@@ -1089,17 +1136,23 @@ app.get('/validate', async (req, res) => {
             console.log("algo paso loco");
             res.json(error);
         }
-    } else if(provinciaData === "ciudad-autónoma-de-buenos-aires"){
+    } else if(provinciaData === "ciudad-autonoma-de-buenos-aires"){
         let data = cp_capital[localidadData];
-        res.json(data);
+        cp2 = data;
     }
-
-    console.log(codigo_postal);
-    console.log(cp2);
-    
-    if(cp2 === codigo_postal){
+   
+    if(Array.isArray(cp2)){
+        validateCP = cp2.some(cp =>{
+            return cp == codigo_postal
+        })
+        if(validateCP){
+            res.json('El CP ingresado es válido :)')
+        } else {
+            res.json('El CP no es válido :(')
+        }
+    } else if(cp2 === codigo_postal){
         res.json('El CP ingresado es válido :)')
-    } else {
+    } else{
         res.json('El CP no es válido :(')
     }
 })
