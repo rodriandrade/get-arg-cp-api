@@ -974,6 +974,10 @@ app.get('/cpv2', async (req, res) => {
 
     let findLocalidad;
 
+    if(provincia === "Tierra del Fuego, Antártida e Islas del Atlántico Sur"){
+        provinica = "Tierra del Fuego";
+    }
+
     // Chequear excepciones para las localidades
     const provinciaToLoop = provincias.find(prov =>{
         return prov.nombre === provincia
