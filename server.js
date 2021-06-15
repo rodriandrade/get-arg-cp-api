@@ -86,7 +86,7 @@ const provincias = [
         ]
     },
     {
-        'nombre': 'Santa Fé',
+        'nombre': 'Santa Fe',
         'localidades': [
             {
                 'old': 'SALADERO MARIANO CABAL',
