@@ -1058,7 +1058,8 @@ app.get('/cpv2', async (req, res) => {
             res.json(error);
         }
     } else if(provinciaData === "ciudad-autonoma-de-buenos-aires"){
-        let data = cp_capital[localidadData];
+        let localidad = localidadData.replace(/\-/g, "");
+        let data = cp_capital[localidad];
         res.json(data);
     }  
 
@@ -1137,7 +1138,8 @@ app.get('/validate', async (req, res) => {
             res.json(error);
         }
     } else if(provinciaData === "ciudad-autonoma-de-buenos-aires"){
-        let data = cp_capital[localidadData];
+        let localidad = localidadData.replace(/\-/g, "");
+        let data = cp_capital[localidad];
         cp2 = data;
     }
    
