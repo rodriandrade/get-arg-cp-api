@@ -800,7 +800,7 @@ const provincias = [
             },
             {
                 'old': 'VILLA MAILIN',
-                'new': 'El Mailin'
+                'new': 'Mailin'
             },
             {
                 'old': 'VILLA GIMENEZ',
@@ -915,7 +915,7 @@ const provincias = [
                 'new': 'Angaco Norte'
             },
             {
-                'old': 'VILLA SEFAIR',
+                'old': 'VILLA SEFAIR (TALACASTO)',
                 'new': 'Talacasto'
             },
             {
@@ -1036,6 +1036,24 @@ app.get('/cpv2', async (req, res) => {
         res.json(data);
     }  
 
+})
+
+app.get('/validate', async (req, res) => {
+    const { provincia, localidad } = req.query;
+    const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
+    const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
+    const provinciaData = removeSignsFromString(provinciaQuery);
+
+    let localidadData = removeSignsFromString(localidadQuery);
+    
+    let cp = await findCp(provinciaData, localidadData);
+    console.log(cp);
+
+    if(cp){
+        res.json('El CP ingresado es válido :)')
+    } else {
+        res.json('El CP no es válido :(')
+    }
 })
 
 const removeSignsFromString = (str) => {
