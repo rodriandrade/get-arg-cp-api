@@ -1075,6 +1075,10 @@ app.get('/cpv2', async (req, res) => {
 app.get('/validate', async (req, res) => {
     let { provincia, localidad, departamento, localidad_censal, municipio, codigo_postal } = req.query;
 
+    if(provincia === "Tierra del Fuego, Antártida e Islas del Atlántico Sur"){
+        provincia = "Tierra del Fuego";
+    }
+
     // Convertir strings para acoplarse al formato aceptado en la URL de la web a la que se hace scrapping
     const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
     const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
