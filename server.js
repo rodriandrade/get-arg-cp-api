@@ -1039,17 +1039,65 @@ app.get('/cpv2', async (req, res) => {
 })
 
 app.get('/validate', async (req, res) => {
-    const { provincia, localidad } = req.query;
+    let { provincia, localidad, departamento, localidad_censal, municipio, codigo_postal } = req.query;
     const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
     const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
+    const departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
+    const localidadCensalQuery = localidad_censal.replace(/\s+/g, '-').toLowerCase();
+    let municipioQuery;
+    if(municipio){
+        municipioQuery = municipio.replace(/\s+/g, '-').toLowerCase();
+    }
     const provinciaData = removeSignsFromString(provinciaQuery);
-
     let localidadData = removeSignsFromString(localidadQuery);
-    
-    let cp = await findCp(provinciaData, localidadData);
-    console.log(cp);
+    const departamentoData = removeSignsFromString(departamentoQuery);
+    const localidadCensalData = removeSignsFromString(localidadCensalQuery);
+    let municipioData;
+    if(municipioQuery){
+        municipioData = removeSignsFromString(municipioQuery);
+    }
 
-    if(cp){
+    let cp2;
+
+    if(provinciaData !== "ciudad-autónoma-de-buenos-aires"){
+        try{
+            let f = await findCp(provinciaData, localidadData);
+            if(f === ""){
+                //console.log("Vengo a buscar por departamento");
+                f = await findCp(provinciaData, departamentoData);
+                if(f === ""){
+                    //console.log("Vengo a buscar por localidad_censal");
+                    f = await findCp(provinciaData, localidadCensalData);
+                    if(f === ""){
+                        //console.log("Vengo a buscar por municipio");
+                        f = await findCp(provinciaData, municipioData);
+                        if(f === ""){
+                            res.json("Mudate ami, imposible encontrar esto");
+                        } else {
+                            cp2 = f;
+                        }
+                    } else {
+                        cp2 = f;
+                    }
+                } else {
+                    cp2 = f;
+                }
+            } else {
+                cp2 = f;
+            }
+        } catch (error){
+            console.log("algo paso loco");
+            res.json(error);
+        }
+    } else if(provinciaData === "ciudad-autónoma-de-buenos-aires"){
+        let data = cp_capital[localidadData];
+        res.json(data);
+    }
+
+    console.log(codigo_postal);
+    console.log(cp2);
+    
+    if(cp2 === codigo_postal){
         res.json('El CP ingresado es válido :)')
     } else {
         res.json('El CP no es válido :(')
