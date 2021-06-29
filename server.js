@@ -1158,14 +1158,14 @@ app.get('/validate', async (req, res) => {
             return cp == codigo_postal
         })
         if(validateCP){
-            res.json('El CP ingresado es válido :)')
+            res.json({ message: 'El CP ingresado es válido :)', isValid: true})
         } else {
-            res.json('El CP no es válido :(')
+            res.json({ message: 'El CP ingresado no es válido :(', isValid: false})
         }
     } else if(cp2 === codigo_postal){
-        res.json('El CP ingresado es válido :)')
+        res.json({ message: 'El CP ingresado es válido :)', isValid: true})
     } else{
-        res.json('El CP no es válido :(')
+        res.json({ message: 'El CP ingresado no es válido :(', isValid: false})
     }
 })
 
