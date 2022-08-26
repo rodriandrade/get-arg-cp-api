@@ -1185,18 +1185,18 @@ app.get('/postal_code', async (req, res) => {
     if(provinciaData !== "ciudad-autonoma-de-buenos-aires"){
         try{
             const postal_code = await findCp(provinciaData, localidadData)
-            res.json({ postal_code: postal_code, type: "number", message: `Codigo postal encontrado para la localidad ${localidad} en la provincia ${provincia}.` })
+            res.status(200).send({ postal_code: postal_code, type: "string", message: `Codigo postal encontrado para la localidad ${localidad} en la provincia ${provincia}.` })
         } catch (error){
             console.log("algo paso loco");
-            res.json({ postal_code: "", type: "", message: `No se encontró código postal para la localidad ${localidad} en la provincia ${provincia}.` })
+            res.status(404).send({ postal_code: "", type: "", message: `No se encontró código postal para la localidad ${localidad} en la provincia ${provincia}.` })
         }
     } else if(provinciaData === "ciudad-autonoma-de-buenos-aires"){
         const localidad = localidadData.replace(/\-/g, "");
         const postal_codes = cp_capital[localidad];
         if(postal_codes){
-            res.json({ postal_code: postal_codes, type: "array", message: `Codigo postal encontrado para la localidad ${localidadData} en la provincia ${provincia}.` })
+            res.status(200).send({ postal_code: postal_codes, type: "array", message: `Codigo postal encontrado para la localidad ${localidadData} en la provincia ${provincia}.` })
         } else {
-            res.json({ postal_code: "", type: "", message: `No se encontró código postal para la localidad ${localidadData} en la provincia ${provincia}.` })
+            res.status(404).send({ postal_code: "", type: "", message: `No se encontró código postal para la localidad ${localidadData} en la provincia ${provincia}.` })
         }
     }
 })
