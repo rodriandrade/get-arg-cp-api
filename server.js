@@ -1169,6 +1169,45 @@ app.get('/validate', async (req, res) => {
     }
 })
 
+// Endpoint para validar CP
+app.get('/postal_code', async (req, res) => {
+    let { provincia, localidad } = req.query;
+
+    if(provincia === "Tierra del Fuego, Antártida e Islas del Atlántico Sur"){
+        provincia = "Tierra del Fuego";
+    }
+
+    // Convertir strings para acoplarse al formato aceptado en la URL de la web a la que se hace scrapping
+    const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
+    const localidadQuery = localidad.replace(/\s+/g, '-').toLowerCase();
+
+    const provinciaData = removeSignsFromString(provinciaQuery);
+    const localidadData = removeSignsFromString(localidadQuery);
+
+    let cp2 = [];
+    let validateCP;
+
+    if(provinciaData !== "ciudad-autonoma-de-buenos-aires"){
+        try{
+            let f = await findCp(provinciaData, localidadData)
+            console.log("HABEMUS CP!")
+            console.log(f)
+            res.json({ postal_code: f})
+        } catch (error){
+            console.log("algo paso loco");
+            res.json(error);
+        }
+    } else if(provinciaData === "ciudad-autonoma-de-buenos-aires"){
+        let localidad = localidadData.replace(/\-/g, "");
+        let data = cp_capital[localidad];
+        console.log("HEY!")
+        console.log(data)
+        res.json({ postal_code: data})
+    }
+})
+
+
+
 const removeSignsFromString = (str) => {
     let a = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     let b = a.replace(/\./g, "");
