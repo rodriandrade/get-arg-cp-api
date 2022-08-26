@@ -939,13 +939,11 @@ app.get('/', (req, res) =>{
 // Función para buscar CP 
 const findCp = async (provincia, localidad) =>{
     try{
-        console.log(localidad);
         const html = await axios.get(`https://codigo-postal.co/argentina/${provincia}/${localidad}/`);
         const $ = cheerio.load(html.data);
         const heading = $('p');
         const cp = heading.find('strong').text();
         const data = cp.slice(17, 21);
-        //console.log(data);
         const checkCp = isNaN(data); // Si devuelve "TRUE" significa que el string no contiene un número. Si devuelve "FALSE", es posible que el string contenga un número valido.
         //console.log(checkCp);
 
@@ -1184,29 +1182,24 @@ app.get('/postal_code', async (req, res) => {
     const provinciaData = removeSignsFromString(provinciaQuery);
     const localidadData = removeSignsFromString(localidadQuery);
 
-    let cp2 = [];
-    let validateCP;
-
     if(provinciaData !== "ciudad-autonoma-de-buenos-aires"){
         try{
-            let f = await findCp(provinciaData, localidadData)
-            console.log("HABEMUS CP!")
-            console.log(f)
-            res.json({ postal_code: f})
+            const postal_code = await findCp(provinciaData, localidadData)
+            res.json({ postal_code: postal_code, type: "number", message: `Codigo postal encontrado para la localidad ${localidad} en la provincia ${provincia}.` })
         } catch (error){
             console.log("algo paso loco");
-            res.json(error);
+            res.json({ postal_code: "", type: "", message: `No se encontró código postal para la localidad ${localidad} en la provincia ${provincia}.` })
         }
     } else if(provinciaData === "ciudad-autonoma-de-buenos-aires"){
-        let localidad = localidadData.replace(/\-/g, "");
-        let data = cp_capital[localidad];
-        console.log("HEY!")
-        console.log(data)
-        res.json({ postal_code: data})
+        const localidad = localidadData.replace(/\-/g, "");
+        const postal_codes = cp_capital[localidad];
+        if(postal_codes){
+            res.json({ postal_code: postal_codes, type: "array", message: `Codigo postal encontrado para la localidad ${localidadData} en la provincia ${provincia}.` })
+        } else {
+            res.json({ postal_code: "", type: "", message: `No se encontró código postal para la localidad ${localidadData} en la provincia ${provincia}.` })
+        }
     }
 })
-
-
 
 const removeSignsFromString = (str) => {
     let a = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
