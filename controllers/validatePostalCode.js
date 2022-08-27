@@ -1,51 +1,13 @@
-const express = require('express');
-const app = express();
-const validatePostalCodeRouter = require("./routes/validatePostalCode")
-const getPostalCodeRouter = require("./routes/getPostalCode")
+const { removeSignsFromString } = require("../utils/stringFormat")
+const { findCp } = require("../utils/findCp")
+const { cp_capital, provincias } = require("../constants/constants")
 
-app.use(express.json());
-
-app.get('/', (req, res) =>{
-    res.send("Welcome to the arg-cp API!");
-})
-
-app.use('/validate', validatePostalCodeRouter)
-app.use('/postal_code', getPostalCodeRouter)
-
-/*
-// Endpoint para averiguar el CP de una localidad
-app.get('/cpv2', async (req, res) => {
-
-    console.log(req.query);
-    let { provincia, localidad, departamento, localidad_censal, municipio } = req.query;
-    
-    // EXCEPCIONES ///////
-
-    let findLocalidad;
+exports.validate = async (req, res) =>{
+    let { provincia, localidad, departamento, localidad_censal, municipio, codigo_postal } = req.query;
 
     if(provincia === "Tierra del Fuego, Antártida e Islas del Atlántico Sur"){
         provincia = "Tierra del Fuego";
     }
-
-    console.log(provincia);
-
-    // Chequear excepciones para las localidades
-    const provinciaToLoop = provincias.find(prov =>{
-        return prov.nombre === provincia
-    })
-
-    if(provinciaToLoop != null){
-        findLocalidad = provinciaToLoop.localidades.find(loc =>{
-            return loc.old === localidad
-        })
-    }
-
-    if(findLocalidad != null){
-        const newLocalidad = findLocalidad.new;
-        localidad = newLocalidad;
-    }
-
-    ///////////
 
     // Convertir strings para acoplarse al formato aceptado en la URL de la web a la que se hace scrapping
     const provinciaQuery = provincia.replace(/\s+/g, '-').toLowerCase();
@@ -54,7 +16,7 @@ app.get('/cpv2', async (req, res) => {
     let departamentoQuery;
     let localidadCensalQuery;
     let municipioQuery;
-
+    
     if(departamento){
         departamentoQuery = departamento.replace(/\s+/g, '-').toLowerCase();
     }
@@ -81,7 +43,10 @@ app.get('/cpv2', async (req, res) => {
     if(municipioQuery){
         municipioData = removeSignsFromString(municipioQuery);
     }
-    
+
+    let cp2 = [];
+    let validateCP;
+
     if(provinciaData !== "ciudad-autonoma-de-buenos-aires"){
         try{
             let f = await findCp(provinciaData, localidadData);
@@ -97,16 +62,16 @@ app.get('/cpv2', async (req, res) => {
                         if(f === ""){
                             res.json("Mudate ami, imposible encontrar esto");
                         } else {
-                            res.json(f);
+                            cp2 = f;
                         }
                     } else {
-                        res.json(f);
+                        cp2 = f;
                     }
                 } else {
-                    res.json(f);   
+                    cp2 = f;
                 }
             } else {
-                res.json(f); 
+                cp2 = f;
             }
         } catch (error){
             console.log("algo paso loco");
@@ -115,13 +80,21 @@ app.get('/cpv2', async (req, res) => {
     } else if(provinciaData === "ciudad-autonoma-de-buenos-aires"){
         let localidad = localidadData.replace(/\-/g, "");
         let data = cp_capital[localidad];
-        res.json(data);
-    }  
-
-})
-*/
-
-app.listen(5000,() => {
-    console.log('Started on PORT 5000');
-})
-
+        cp2 = data;
+    }
+   
+    if(Array.isArray(cp2)){
+        validateCP = cp2.some(cp =>{
+            return cp == codigo_postal
+        })
+        if(validateCP){
+            res.json({ message: 'El CP ingresado es válido :)', isValid: true})
+        } else {
+            res.json({ message: 'El CP ingresado no es válido :(', isValid: false})
+        }
+    } else if(cp2 === codigo_postal){
+        res.json({ message: 'El CP ingresado es válido :)', isValid: true})
+    } else{
+        res.json({ message: 'El CP ingresado no es válido :(', isValid: false})
+    }
+}
