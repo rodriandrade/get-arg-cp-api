@@ -705,6 +705,14 @@ const provincias = [
                 'new': 'Claypole'
             },
             {
+                'old': 'DON TORCUATO ESTE',
+                'new': 'Don Torcuato'
+            },
+            {
+                'old': 'DON TORCUATO OESTE',
+                'new': 'Don Torcuato'
+            },
+            {
                 'old': "D'ORBIGNY",
                 'new': 'D Orbigny'
             },
